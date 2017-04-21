@@ -1,0 +1,8 @@
+apply:
+ operator:
+ apply:
+  function:
+  identifier:
+ apply:
+  function:
+  identifier:
