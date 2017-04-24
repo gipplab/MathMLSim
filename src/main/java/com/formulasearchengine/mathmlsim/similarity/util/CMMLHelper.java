@@ -39,11 +39,19 @@ public class CMMLHelper {
      * @param mathml full MathML document
      * @return first node of the MathML-Content annotations within a MathML document
      */
-    public static Node getAbstractCmml(String mathml) {
+    public static Node getStrictCmml(String mathml) {
         try {
             // get ContentMathML to Strict ContentMathML and finally the abstract CD
-            CMMLInfo cmmlInfo = new CMMLInfo(mathml).toStrictCmml().abstract2CDs();
-            // get the apply node of the ContentMathML root
+            CMMLInfo cmmlInfo = new CMMLInfo(mathml).toStrictCmml();
+
+            /**
+             * Don't use:
+             * Abstract2CD nicht benutzen! Sobald ein Knoten tatsächlich umbenannt
+             * wird, verliert dieser Knoten alle Kinder! Grund unklar.
+             */
+            // System.out.println(cmmlInfo.abstract2CDs().toString());
+
+            // and finally only get the first apply node of the ContentMathML
             return getFirstCmmlNode(cmmlInfo);
         } catch (Exception e) {
             e.printStackTrace();

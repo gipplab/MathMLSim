@@ -1,8 +1,8 @@
-apply:
+apply:+
  plus:+
- apply:
+ apply:sin
   ci:sin
   ci:x
- apply:
+ apply:cos
   ci:cos
   ci:y
