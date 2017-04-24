@@ -83,6 +83,10 @@
                <ci cd="function" id="c4" xref="p4">cos</ci>
                <ci cd="identifier" id="c6" xref="p6">y</ci>
             </apply>
+            <apply id="c12" xref="p12">
+               <ci cd="function" id="c8" xref="p8">tan</ci>
+               <cn cd="number" id="c10" xref="p10">1</cn>
+            </apply>
          </apply>
       </annotation-xml>
    </semantics>

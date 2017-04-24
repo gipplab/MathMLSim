@@ -4,6 +4,7 @@ import com.formulasearchengine.mathmlsim.similarity.node.MathNode;
 import com.formulasearchengine.mathmlsim.similarity.node.MathNodeGenerator;
 import com.formulasearchengine.mathmlsim.similarity.result.Match;
 import com.formulasearchengine.mathmltools.mml.CMMLInfo;
+import com.google.common.collect.HashMultiset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,7 @@ public class SubTreeComparison {
     boolean findSimilarities(MathNode refTree, MathNode comTree, List<Match> similarities, boolean holdRefTree, boolean onlyOperators) {
         if (isIdenticalTree(refTree, comTree)) {
             // hit!
-            comTree.setMarked(true);
+            comTree.setMarked();
             similarities.add(new Match(refTree, comTree, type));
             return true;
         }
@@ -148,6 +149,26 @@ public class SubTreeComparison {
      */
     List<MathNode> filterSameChildren(MathNode searchNode, List<MathNode> list) {
         return list.stream().filter(searchNode::equals).collect(Collectors.toList());
+    }
+
+    /**
+     * This method is still in testing.
+     * <br/>
+     * Calculate the coverage factor between two trees, whereas only their leafs
+     * are considered. Leafs are typically identifiers or constants.
+     *
+     * @param refLeafs all leafs from the partial (or full) reference tree
+     * @param compLeafs all leafs from the partial (or full) comparison tree
+     * @return coverage factor between 0 to 1, 1 is a full-match
+     */
+    public static double getCoverage(List<MathNode> refLeafs, List<MathNode> compLeafs) {
+        if (compLeafs.size() == 0) {
+            return 1.;
+        }
+        HashMultiset<MathNode> tmp = HashMultiset.create();
+        tmp.addAll(compLeafs);
+        tmp.removeAll(refLeafs);
+        return 1 - Double.valueOf(tmp.size()) / Double.valueOf(compLeafs.size());
     }
 
 }

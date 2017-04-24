@@ -1,5 +1,6 @@
 package com.formulasearchengine.mathmlsim.similarity.result;
 
+import com.formulasearchengine.mathmlsim.similarity.SubTreeComparison;
 import com.formulasearchengine.mathmlsim.similarity.node.MathNode;
 
 /**
@@ -25,15 +26,15 @@ public class SubMatch {
      * The match will refer to the part of the reference tree, whereas the sub-match will
      * refer to the part of the comparison tree.
      *
-     * @param refTree partial reference tree (or full tree)
+     * @param refTree  partial reference tree (or full tree)
      * @param compTree partial comparison tree (or full tree)
-     * @param type type of similarity
+     * @param type     type of similarity
      */
     public SubMatch(MathNode refTree, MathNode compTree, Match.Type type) {
         this.id = compTree.getId();
         this.depth = compTree.getDepth();
         this.type = type.name();
-        this.coverage = Match.getCoverage(compTree.getLeafs(), refTree.getLeafs());
+        this.coverage = SubTreeComparison.getCoverage(compTree.getLeafs(), refTree.getLeafs());
         this.assessment = computeAssessment(refTree, compTree);
     }
 
@@ -43,7 +44,7 @@ public class SubMatch {
      * This method assesses the similarity value between two partial trees.
      * The measurement consists of a product from their depth and coverage distance.
      *
-     * @param refTree partial reference tree (or full tree)
+     * @param refTree  partial reference tree (or full tree)
      * @param compTree partial comparison tree (or full tree)
      * @return value between 0 to 1, 1 is a full-match
      */

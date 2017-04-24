@@ -7,7 +7,6 @@ import com.formulasearchengine.mathmltools.mml.CMMLInfo;
 import org.apache.commons.io.IOUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 /**
- * TODO
+ * Test class for our tree comparison algorithm
  *
  * @author Vincent Stange
  */
@@ -44,6 +43,7 @@ public class SubTreeComparisonTest {
 
         // run the comparison
         List<Match> found = new SubTreeComparison("identical").getSimilarities(doc1, doc2, true);
+        // - and write the similarities as a string
         String actual = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(found);
 
         // valide the similarities as a JSON string
@@ -68,7 +68,24 @@ public class SubTreeComparisonTest {
     }
 
     @Test
-    public void isIdenticalTree_positive_orderinsensitive() throws Exception {
+    public void isIdenticalTree_positive_strict() throws Exception {
+        MathNode apply = new MathNode("apply", "arith1").setStrict();
+        ;
+        apply.addChild(new MathNode("arith1", "plus").setStrict());
+        apply.addChild(new MathNode("ci", "x").setStrict());
+        apply.addChild(new MathNode("cn", "1").setStrict());
+
+        MathNode apply2 = new MathNode("apply", "arith1").setStrict();
+        apply2.addChild(new MathNode("arith1", "minus").setStrict());
+        apply2.addChild(new MathNode("ci", "y").setStrict());
+        apply2.addChild(new MathNode("cn", "2").setStrict());
+
+        // x+1 = y-2 - they have the same structure and the nodes are marked strict - this should be equal
+        assertTrue(new SubTreeComparison("identical").isIdenticalTree(apply, apply2));
+    }
+
+    @Test
+    public void isIdenticalTree_positive_order_insensitive() throws Exception {
         MathNode apply1 = new MathNode("apply", "");
         apply1.addChild(new MathNode("plus", null));
         apply1.addChild(new MathNode("x", null));
@@ -112,6 +129,34 @@ public class SubTreeComparisonTest {
         // should find both x
         assertThat(findings.size(), is(2));
         assertThat(findings.get(0), is(new MathNode("x", null)));
+    }
+
+    @Test
+    public void getCoverage_identical() throws Exception {
+        // frist list of leafs from a tree
+        List<MathNode> list1 = new ArrayList<>();
+        list1.add(new MathNode("ci", "x"));
+        list1.add(new MathNode("cn", "3"));
+
+        List<MathNode> list2 = new ArrayList<>();
+        list2.add(new MathNode("ci", "x"));
+        list2.add(new MathNode("cn", "2"));
+
+        assertThat(SubTreeComparison.getCoverage(list1, list2), is(0.5));
+    }
+
+    @Test
+    public void getCoverage_similar() throws Exception {
+        // frist list of leafs from a tree
+        List<MathNode> list1 = new ArrayList<>();
+        list1.add(new MathNode("ci", "x").setStrict());
+        list1.add(new MathNode("cn", "3").setStrict());
+
+        List<MathNode> list2 = new ArrayList<>();
+        list2.add(new MathNode("ci", "x").setStrict());
+        list2.add(new MathNode("cn", "2").setStrict());
+
+        assertThat(SubTreeComparison.getCoverage(list1, list2), is(0.5));
     }
 
 }

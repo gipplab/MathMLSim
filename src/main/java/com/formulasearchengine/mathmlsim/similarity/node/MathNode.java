@@ -49,6 +49,7 @@ public class MathNode {
 
     private boolean marked = false;
 
+    private boolean strict = false;
 
     public MathNode() {
         // empty constructur
@@ -120,6 +121,8 @@ public class MathNode {
     }
 
     public void addChild(MathNode child) {
+        if (child == null)
+            return;
         if (child.getName() != null && "plus times".contains(child.getName())) {
             orderSensitive = false;
         }
@@ -138,8 +141,8 @@ public class MathNode {
         return marked;
     }
 
-    public void setMarked(boolean marked) {
-        this.marked = marked;
+    public void setMarked() {
+        this.marked = true;
     }
 
     public List<MathNode> getLeafs() {
@@ -147,8 +150,11 @@ public class MathNode {
             return Collections.singletonList(this);
         }
         List<MathNode> unterlings = new ArrayList<>();
-        for(MathNode child : getChildren()) {
-            unterlings.addAll(child.getLeafs());
+        // if this is an apply node, the first child is an
+        // operation-node not a constant or number leaf
+        int startIdx = "apply".equals(getName()) ? 1 : 0;
+        for(int i = startIdx; i < children.size(); i ++) {
+            unterlings.addAll(children.get(i).getLeafs());
         }
         return unterlings;
     }
@@ -163,6 +169,15 @@ public class MathNode {
         return maxDepth;
     }
 
+    public boolean isStrict() {
+        return strict;
+    }
+
+    public MathNode setStrict() {
+        this.strict = true;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -171,11 +186,19 @@ public class MathNode {
         MathNode mathNode = (MathNode) o;
 
         if (name != null ? !name.equals(mathNode.name) : mathNode.name != null) return false;
-        return value != null ? value.equals(mathNode.value) : mathNode.value == null;
+        if (isStrict()) {
+            // this is a strict node, value check is not applied
+            return true;
+        } else {
+            return value != null ? value.equals(mathNode.value) : mathNode.value == null;
+        }
+
     }
 
     @Override
     public int hashCode() {
+        // the missing check on isStrict is not a bug, but a deliberate
+        // decision for the coverage computation (we use hashes there)
         return Objects.hash(name, value);
     }
 

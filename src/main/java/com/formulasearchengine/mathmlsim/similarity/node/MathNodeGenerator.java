@@ -48,12 +48,50 @@ public class MathNodeGenerator {
     private static MathNode createMathNode(Node node, int depth) {
         MathNode mathNode = new MathNode();
         mathNode.setName(node.getNodeName());
+        if (mathNode.getName().equalsIgnoreCase("annotation-xml")) {
+            // this can be an additional tag from the strict cmml conversion
+            // - node should not used.
+            return null;
+        }
         mathNode.setAttributes(node.getAttributes());
         mathNode.setValue(node.getFirstChild() != null ? node.getFirstChild().getTextContent().trim() : node.getTextContent().trim());
         mathNode.setDepth(depth);
         // iterate over all child elements
         XMLUtils.getChildElements(node).forEach(c -> mathNode.addChild(createMathNode(c, depth + 1)));
         return mathNode;
+    }
+
+    /**
+     * TODO
+     *
+     * @param mathNode
+     * @return
+     */
+    public static MathNode toAbstract(MathNode mathNode) {
+        // change the tag-name to the "cd" attribute value, if it exists
+        String cd = mathNode.getAttribute("cd");
+        if (cd != null && !cd.isEmpty()) {
+            mathNode.setName(cd);
+        }
+        // set the node to strict - the behavior will change
+        mathNode.setStrict();
+        // for every child the same
+        mathNode.getChildren().forEach(MathNodeGenerator::toAbstract);
+        return mathNode;
+    }
+
+    /**
+     * Converts a MathNode into a an simplistic indented tree
+     * representation of itself.
+     *
+     * @param node   Node to begin with and onwards for all children of it.
+     * @param indent starting line used as an indent (e.g. start with "")
+     * @return return a tree representation of itself
+     */
+    public static String print(MathNode node, String indent) {
+        StringBuilder sb = new StringBuilder(indent + node.toString() + "\n");
+        node.getChildren().forEach(n -> sb.append(print(n, indent + " ")));
+        return sb.toString();
     }
 
 }
