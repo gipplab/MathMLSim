@@ -49,7 +49,7 @@ public class MathNode {
 
     private boolean marked = false;
 
-    private boolean strict = false;
+    private boolean abstractNode = false;
 
     public MathNode() {
         // empty constructur
@@ -145,6 +145,15 @@ public class MathNode {
         this.marked = true;
     }
 
+    public boolean isAbstractNode() {
+        return abstractNode;
+    }
+
+    public MathNode setAbstractNode() {
+        this.abstractNode = true;
+        return this;
+    }
+
     public List<MathNode> getLeafs() {
         if (isLeaf()) {
             return Collections.singletonList(this);
@@ -169,15 +178,6 @@ public class MathNode {
         return maxDepth;
     }
 
-    public boolean isStrict() {
-        return strict;
-    }
-
-    public MathNode setStrict() {
-        this.strict = true;
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -186,8 +186,8 @@ public class MathNode {
         MathNode mathNode = (MathNode) o;
 
         if (name != null ? !name.equals(mathNode.name) : mathNode.name != null) return false;
-        if (isStrict()) {
-            // this is a strict node, value check is not applied
+        if (isAbstractNode()) {
+            // this is a abstractNode node, value check is not applied
             return true;
         } else {
             return value != null ? value.equals(mathNode.value) : mathNode.value == null;
@@ -197,7 +197,7 @@ public class MathNode {
 
     @Override
     public int hashCode() {
-        // the missing check on isStrict is not a bug, but a deliberate
+        // the missing check on isAbstractNode is not a bug, but a deliberate
         // decision for the coverage computation (we use hashes there)
         return Objects.hash(name, value);
     }

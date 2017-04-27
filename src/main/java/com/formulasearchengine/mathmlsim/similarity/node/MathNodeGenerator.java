@@ -62,10 +62,17 @@ public class MathNodeGenerator {
     }
 
     /**
-     * TODO
+     * Creates an abstract MathNode tree. This methode stands as an
+     * alternative to CMMLInfo.abstract2CD() and tries to improve the
+     * versatily during a comparison.
+     * <br/>
+     * In an abstract MathNode the tag-name will be overwritten with
+     * the specific CD tag-name but the original value remains.
+     * Furthermore the equal()-method will change - the value will
+     * not be considered!
      *
-     * @param mathNode
-     * @return
+     * @param mathNode MathNode tree to be converted.
+     * @return self reference of the MathNode after the conversion.
      */
     public static MathNode toAbstract(MathNode mathNode) {
         // change the tag-name to the "cd" attribute value, if it exists
@@ -74,7 +81,7 @@ public class MathNodeGenerator {
             mathNode.setName(cd);
         }
         // set the node to strict - the behavior will change
-        mathNode.setStrict();
+        mathNode.setAbstractNode();
         // for every child the same
         mathNode.getChildren().forEach(MathNodeGenerator::toAbstract);
         return mathNode;
