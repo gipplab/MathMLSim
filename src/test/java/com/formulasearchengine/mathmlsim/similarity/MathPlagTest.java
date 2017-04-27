@@ -1,10 +1,13 @@
 package com.formulasearchengine.mathmlsim.similarity;
 
+import com.formulasearchengine.mathmlsim.similarity.result.Match;
 import org.junit.Test;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * TODO
@@ -63,7 +66,9 @@ public class MathPlagTest {
                 "  </semantics>\n" +
                 "</math>\n";
 
-        MathPlag.compareMathML(mathml1, mathml2);
+        Map<String, Object> stringObjectMap = MathPlag.compareOriginalFactors(mathml1, mathml2);
+
+        List<Match> matches = MathPlag.compareMathML(mathml1, mathml2, "identical");
     }
 
 }

@@ -69,16 +69,16 @@ public class SubTreeComparisonTest {
 
     @Test
     public void isIdenticalTree_positive_strict() throws Exception {
-        MathNode apply = new MathNode("apply", "arith1").setStrict();
+        MathNode apply = new MathNode("apply", "arith1").setAbstractNode();
         ;
-        apply.addChild(new MathNode("arith1", "plus").setStrict());
-        apply.addChild(new MathNode("ci", "x").setStrict());
-        apply.addChild(new MathNode("cn", "1").setStrict());
+        apply.addChild(new MathNode("arith1", "plus").setAbstractNode());
+        apply.addChild(new MathNode("ci", "x").setAbstractNode());
+        apply.addChild(new MathNode("cn", "1").setAbstractNode());
 
-        MathNode apply2 = new MathNode("apply", "arith1").setStrict();
-        apply2.addChild(new MathNode("arith1", "minus").setStrict());
-        apply2.addChild(new MathNode("ci", "y").setStrict());
-        apply2.addChild(new MathNode("cn", "2").setStrict());
+        MathNode apply2 = new MathNode("apply", "arith1").setAbstractNode();
+        apply2.addChild(new MathNode("arith1", "minus").setAbstractNode());
+        apply2.addChild(new MathNode("ci", "y").setAbstractNode());
+        apply2.addChild(new MathNode("cn", "2").setAbstractNode());
 
         // x+1 = y-2 - they have the same structure and the nodes are marked strict - this should be equal
         assertTrue(new SubTreeComparison("identical").isIdenticalTree(apply, apply2));
@@ -149,12 +149,12 @@ public class SubTreeComparisonTest {
     public void getCoverage_similar() throws Exception {
         // frist list of leafs from a tree
         List<MathNode> list1 = new ArrayList<>();
-        list1.add(new MathNode("ci", "x").setStrict());
-        list1.add(new MathNode("cn", "3").setStrict());
+        list1.add(new MathNode("ci", "x").setAbstractNode());
+        list1.add(new MathNode("cn", "3").setAbstractNode());
 
         List<MathNode> list2 = new ArrayList<>();
-        list2.add(new MathNode("ci", "x").setStrict());
-        list2.add(new MathNode("cn", "2").setStrict());
+        list2.add(new MathNode("ci", "x").setAbstractNode());
+        list2.add(new MathNode("cn", "2").setAbstractNode());
 
         assertThat(SubTreeComparison.getCoverage(list1, list2), is(0.5));
     }
