@@ -55,12 +55,15 @@ public class MathPlag {
             CMMLInfo compDoc = new CMMLInfo(mathml2);
             final Integer depth = compDoc.getDepth(refDoc.getXQuery());
             final Double coverage = compDoc.getCoverage(refDoc.getElements());
+            Boolean formula = compDoc.isEquation();
             Boolean match = compDoc.toStrictCmml().isMatch(refDoc.toStrictCmml().getXQuery());
+            //Boolean match = compDoc.toDataCmml().isMatch(refDoc.toDataCmml().getXQuery());
 
             HashMap<String, Object> result = new HashMap<>();
             result.put("depth", depth);
             result.put("coverage", coverage);
             result.put("structure match", match);
+            result.put("formula", formula);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
