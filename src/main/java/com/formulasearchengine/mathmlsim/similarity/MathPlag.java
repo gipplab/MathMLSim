@@ -56,7 +56,7 @@ public class MathPlag {
             final Integer depth = compDoc.getDepth(refDoc.getXQuery());
             final Double coverage = compDoc.getCoverage(refDoc.getElements());
             Boolean formula = compDoc.isEquation();
-            Boolean match = compDoc.toStrictCmml().isMatch(refDoc.toStrictCmml().getXQuery());
+            Boolean match = compDoc.toStrictCmml().abstract2CDs().isMatch(refDoc.toStrictCmml().abstract2CDs().getXQuery());
             //Boolean match = compDoc.toDataCmml().isMatch(refDoc.toDataCmml().getXQuery());
 
             HashMap<String, Object> result = new HashMap<>();
