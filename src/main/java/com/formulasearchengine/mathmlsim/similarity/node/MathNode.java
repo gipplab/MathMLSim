@@ -173,8 +173,11 @@ public class MathNode {
             // set and return at the same time
             return maxDepth = depth;
         }
-        if (maxDepth == 0)
-            maxDepth = children.stream().max((c1, c2) -> Math.max(c1.getMaxDepth(), c2.getMaxDepth())).get().getDepth();
+        if (maxDepth == 0) {
+            maxDepth = children.stream()
+                    .max((c1, c2) -> Math.max(c1.getMaxDepth(), c2.getMaxDepth()))
+                    .get().getDepth();
+        }
         return maxDepth;
     }
 
