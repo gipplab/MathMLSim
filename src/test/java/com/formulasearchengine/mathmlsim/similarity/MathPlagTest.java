@@ -1,6 +1,7 @@
 package com.formulasearchengine.mathmlsim.similarity;
 
 import com.formulasearchengine.mathmlsim.similarity.result.Match;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -9,66 +10,60 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
 /**
- * TODO
- *
  * @author Vincent Stange
  */
 public class MathPlagTest {
 
     @Test
-    public void foobar() throws IOException, ParserConfigurationException, TransformerException {
-        String mathml1 = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" id=\"p1.1.m1.1\" class=\"ltx_Math\" alttext=\"a+b\" display=\"inline\">\n" +
-                "  <semantics id=\"p1.1.m1.1a\">\n" +
-                "    <mrow id=\"p1.1.m1.1.4\" xref=\"p1.1.m1.1.4.cmml\">\n" +
-                "      <mi id=\"p1.1.m1.1.1\" xref=\"p1.1.m1.1.1.cmml\">a</mi>\n" +
-                "      <mo id=\"p1.1.m1.1.2\" xref=\"p1.1.m1.1.2.cmml\">+</mo>\n" +
-                "      <mi id=\"p1.1.m1.1.3\" xref=\"p1.1.m1.1.3.cmml\">b</mi>\n" +
-                "    </mrow>\n" +
-                "    <annotation-xml encoding=\"MathML-Content\" id=\"p1.1.m1.1b\">\n" +
-                "      <apply id=\"p1.1.m1.1.4.cmml\" xref=\"p1.1.m1.1.4\">\n" +
-                "        <plus id=\"p1.1.m1.1.2.cmml\" xref=\"p1.1.m1.1.2\"/>\n" +
-                "        <ci id=\"p1.1.m1.1.1.cmml\" xref=\"p1.1.m1.1.1\">a</ci>\n" +
-                "        <ci id=\"p1.1.m1.1.3.cmml\" xref=\"p1.1.m1.1.3\">b</ci>\n" +
-                "      </apply>\n" +
-                "    </annotation-xml>\n" +
-                "    <annotation encoding=\"application/x-tex\" id=\"p1.1.m1.1c\">a+b</annotation>\n" +
-                "  </semantics>\n" +
-                "</math>\n";
+    public void simpleRun_identical_1() throws IOException, ParserConfigurationException, TransformerException {
+        // prepare two mathml files, cmml is in the annotate element
+        String refMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_annotation_1.xml"), "UTF-8");
+        String compMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_annotation_2.xml"), "UTF-8");
+        // test the old comparison results
+        Map<String, Object> result = MathPlag.compareOriginalFactors(refMathML, compMathML);
+        assertThat(result, notNullValue());
+        assertThat(result.get("coverage"), is(1.0));
+        assertThat(result.get("depth"), is(5));
+        assertThat(result.get("structure match"), is(true));
+        assertThat(result.get("formula"), is(false));
+        // test the mathplag results
+        List<Match> matches = MathPlag.compareIdenticalMathML(refMathML, compMathML);
+        assertThat(matches, notNullValue());
+        assertThat(matches.size(), is(1));
+        assertThat(matches.get(0).id, is("p1.1.m1.1.4.cmml"));
+        assertThat(matches.get(0).coverage, is(1.0));
+    }
 
-        String mathml2 = "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" id=\"p1.1.m1.1\" class=\"ltx_Math\" alttext=\"(a+b)*c\" display=\"inline\">\n" +
-                "  <semantics id=\"p1.1.m1.1a\">\n" +
-                "    <mrow id=\"p1.1.m1.1.8\" xref=\"p1.1.m1.1.8.cmml\">\n" +
-                "      <mrow id=\"p1.1.m1.1.8.1b\">\n" +
-                "        <mo stretchy=\"false\" id=\"p1.1.m1.1.8.1\">(</mo>\n" +
-                "        <mrow id=\"XM1\" xref=\"XM1.cmml\">\n" +
-                "          <mi id=\"p1.1.m1.1.2\" xref=\"p1.1.m1.1.2.cmml\">a</mi>\n" +
-                "          <mo id=\"p1.1.m1.1.3\" xref=\"p1.1.m1.1.3.cmml\">+</mo>\n" +
-                "          <mi id=\"p1.1.m1.1.4\" xref=\"p1.1.m1.1.4.cmml\">b</mi>\n" +
-                "        </mrow>\n" +
-                "        <mo stretchy=\"false\" id=\"p1.1.m1.1.8.1a\">)</mo>\n" +
-                "      </mrow>\n" +
-                "      <mo id=\"p1.1.m1.1.6\" xref=\"p1.1.m1.1.6.cmml\">*</mo>\n" +
-                "      <mi id=\"p1.1.m1.1.7\" xref=\"p1.1.m1.1.7.cmml\">c</mi>\n" +
-                "    </mrow>\n" +
-                "    <annotation-xml encoding=\"MathML-Content\" id=\"p1.1.m1.1b\">\n" +
-                "      <apply id=\"p1.1.m1.1.8.cmml\" xref=\"p1.1.m1.1.8\">\n" +
-                "        <times id=\"p1.1.m1.1.6.cmml\" xref=\"p1.1.m1.1.6\"/>\n" +
-                "        <apply id=\"XM1.cmml\" xref=\"XM1\">\n" +
-                "          <plus id=\"p1.1.m1.1.3.cmml\" xref=\"p1.1.m1.1.3\"/>\n" +
-                "          <ci id=\"p1.1.m1.1.2.cmml\" xref=\"p1.1.m1.1.2\">a</ci>\n" +
-                "          <ci id=\"p1.1.m1.1.4.cmml\" xref=\"p1.1.m1.1.4\">b</ci>\n" +
-                "        </apply>\n" +
-                "        <ci id=\"p1.1.m1.1.7.cmml\" xref=\"p1.1.m1.1.7\">c</ci>\n" +
-                "      </apply>\n" +
-                "    </annotation-xml>\n" +
-                "    <annotation encoding=\"application/x-tex\" id=\"p1.1.m1.1c\">(a+b)*c</annotation>\n" +
-                "  </semantics>\n" +
-                "</math>\n";
+    @Test
+    public void simpleRun_similar_1() throws IOException, ParserConfigurationException, TransformerException {
+        // prepare two mathml files, cmml is in the annotate element
+        String refMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_query_pure_1.xml"), "UTF-8");
+        String compMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_annotation_3.xml"), "UTF-8");
+        // test the old comparison results
+        Map<String, Object> result = MathPlag.compareOriginalFactors(refMathML, compMathML);
+        assertThat(result, notNullValue());
+        assertThat(result.get("coverage"), is(0.0));
+        assertThat(result.get("depth"), nullValue());
+        assertThat(result.get("structure match"), is(true));
+        assertThat(result.get("formula"), is(true));
 
-        Map<String, Object> stringObjectMap = MathPlag.compareOriginalFactors(mathml1, mathml2);
+        // test the identical mathplag results
+        List<Match> identMatch = MathPlag.compareIdenticalMathML(refMathML, compMathML);
+        assertThat(identMatch, notNullValue());
+        assertThat(identMatch.size(), is(0));
 
-        List<Match> matches = MathPlag.compareMathML(mathml1, mathml2, "identical");
+        // test the similar mathplag results
+        List<Match> simMatch = MathPlag.compareSimilarMathML(refMathML, compMathML);
+        assertThat(simMatch, notNullValue());
+        assertThat(simMatch.size(), is(1));
+        // the query has no id attribute for the qvar element
+        assertThat(simMatch.get(0).id, nullValue());
+        // The query should be completely found inside the comparisonMathML
+        assertThat(simMatch.get(0).matches.get(0).depth, is(1));
     }
 
 }
