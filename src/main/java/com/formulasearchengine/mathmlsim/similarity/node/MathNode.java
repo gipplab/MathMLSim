@@ -205,6 +205,20 @@ public class MathNode {
         return Objects.hash(name, value);
     }
 
+    /**
+     * Transforms this MathNode tree to an abstract MathNode tree.
+     * <br/>
+     * In an abstract MathNode the tag-name will be overwritten with
+     * the specific CD tag-name but the original value remains.
+     * Furthermore the equal()-method will change - the value will
+     * then not be considered!
+     *
+     * @return self reference of the MathNode after the conversion.
+     */
+    public MathNode toAbstract() {
+        return MathNodeGenerator.toAbstract(this);
+    }
+
     @Override
     public String toString() {
         return String.format("%s:%s", name, value);
