@@ -6,8 +6,9 @@ import com.formulasearchengine.mathmltools.mml.CMMLInfo;
 import org.w3c.dom.Node;
 
 /**
- * This class converts MathML (Content MathML) into our own  math expression tree representation
- * of a mathematical formula. (CMML document > MathNode)
+ * This class converts MathML (Content MathML) into our own
+ * math expression tree representation of a mathematical
+ * formula. (CMML document > MathNode)
  *
  * @author Vincent Stange
  */
@@ -33,7 +34,9 @@ public class MathNodeGenerator {
     public static MathNode generateMathNode(Node cmmlRoot) {
         MathNode mathNode = createMathNode(cmmlRoot, 0);
         // compute the maximum depth at least once after creation to define it for each branch.
-        mathNode.getMaxDepth();
+        if (mathNode != null) {
+            mathNode.getMaxDepth();
+        }
         return mathNode;
     }
 
