@@ -60,7 +60,9 @@ public class CMMLHelper {
     }
 
     /**
-     * Get the first node of the MathML-Content annotations within a CMMLInfo document.
+     * Get the root apply node from the content mathml.
+     * It will search for the first node of the MathML-Content annotations
+     * or the semantics/apply node within a CMMLInfo document.
      *
      * @param cmmlInfo CMMLInfo document
      * @return first node of the MathML-Content annotations within a MathML document
@@ -68,7 +70,11 @@ public class CMMLHelper {
     public static Node getFirstCmmlNode(CMMLInfo cmmlInfo) {
         try {
             XPath xpath = XMLHelper.namespaceAwareXpath("m", CMMLInfo.NS_MATHML);
-            return (Node) xpath.compile("*//m:annotation-xml[@encoding='MathML-Content']/m:apply").evaluate(cmmlInfo, XPathConstants.NODE);
+            Node applyRoot = (Node) xpath.compile("*//m:annotation-xml[@encoding='MathML-Content']/m:apply").evaluate(cmmlInfo, XPathConstants.NODE);
+            if (applyRoot == null) {
+                applyRoot = (Node) xpath.compile("*//m:semantics/m:apply").evaluate(cmmlInfo, XPathConstants.NODE);
+            }
+            return applyRoot;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
