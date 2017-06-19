@@ -45,24 +45,27 @@ public class MathPlag {
     /**
      * Old score - this is basically a print out for comparison and be deleted later on
      *
-     * @param mathml1 Reference MathML string (must contain pMML and cMML)
-     * @param mathml2 Comparison MathML string (must contain pMML and cMML)
+     * @param refMathML Reference MathML string (must contain pMML and cMML)
+     * @param compMathML Comparison MathML string (must contain pMML and cMML)
      * @return ap of all found factors
      */
-    public static Map<String, Object> compareOriginalFactors(String mathml1, String mathml2) {
+    public static Map<String, Object> compareOriginalFactors(String refMathML, String compMathML) {
         try {
-            CMMLInfo refDoc = new CMMLInfo(mathml1);
-            CMMLInfo compDoc = new CMMLInfo(mathml2);
+            CMMLInfo refDoc = new CMMLInfo(refMathML);
+            CMMLInfo compDoc = new CMMLInfo(compMathML);
             final Integer depth = compDoc.getDepth(refDoc.getXQuery());
             final Double coverage = compDoc.getCoverage(refDoc.getElements());
             Boolean formula = compDoc.isEquation();
-            Boolean match = compDoc.toStrictCmml().abstract2CDs().isMatch(refDoc.toStrictCmml().abstract2CDs().getXQuery());
-            //Boolean match = compDoc.toDataCmml().isMatch(refDoc.toDataCmml().getXQuery());
+            Boolean structMatch = compDoc.toStrictCmml().abstract2CDs()
+                    .isMatch(refDoc.toStrictCmml().abstract2CDs().getXQuery());
+            Boolean dataMatch = new CMMLInfo(compMathML).toDataCmml().abstract2DTs()
+                    .isMatch(new CMMLInfo(refMathML).abstract2DTs().getXQuery());
 
             HashMap<String, Object> result = new HashMap<>();
             result.put("depth", depth);
             result.put("coverage", coverage);
-            result.put("structure match", match);
+            result.put("structure match", structMatch);
+            result.put("data match", dataMatch);
             result.put("formula", formula);
             return result;
         } catch (Exception e) {

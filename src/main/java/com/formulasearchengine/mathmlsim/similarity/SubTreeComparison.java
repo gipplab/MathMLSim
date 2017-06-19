@@ -74,24 +74,24 @@ public class SubTreeComparison {
             return true;
         }
         // iterate the comparison tree over the current node from the ref tree
-        for (MathNode bTreeChild : comTree.getChildren()) {
+        for (MathNode compChild : comTree.getChildren()) {
             // don't look at leafs if it is already marked
             // or we only want to compare branching nodes
-            if (bTreeChild.isMarked() || onlyOperators && bTreeChild.isLeaf())
+            if (compChild.isMarked() || onlyOperators && compChild.isLeaf())
                 continue;
             // go deeper in the comp. tree but hold the ref tree
-            if (findSimilarities(refTree, bTreeChild, similarities, true, onlyOperators)) {
+            if (findSimilarities(refTree, compChild, similarities, true, onlyOperators)) {
                 return true;
             }
         }
 
         if (!holdRefTree) {
             // go deeper in the reference tree
-            for (MathNode aTreeChild : refTree.getChildren()) {
-                if (onlyOperators && aTreeChild.isLeaf())
+            for (MathNode refChild : refTree.getChildren()) {
+                if (onlyOperators && refChild.isLeaf())
                     continue;
 
-                findSimilarities(aTreeChild, comTree, similarities, false, onlyOperators);
+                findSimilarities(refChild, comTree, similarities, false, onlyOperators);
             }
         }
         return false;
@@ -168,7 +168,7 @@ public class SubTreeComparison {
         HashMultiset<MathNode> tmp = HashMultiset.create();
         tmp.addAll(compLeafs);
         tmp.removeAll(refLeafs);
-        return 1 - Double.valueOf(tmp.size()) / Double.valueOf(compLeafs.size());
+        return 1 - (double) tmp.size() / (double) compLeafs.size();
     }
 
 }

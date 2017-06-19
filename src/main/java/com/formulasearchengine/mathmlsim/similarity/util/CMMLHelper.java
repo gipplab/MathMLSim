@@ -44,10 +44,10 @@ public class CMMLHelper {
             // get ContentMathML to Strict ContentMathML and finally the abstract CD
             CMMLInfo cmmlInfo = new CMMLInfo(mathml).toStrictCmml();
 
-            /**
-             * Don't use:
-             * Abstract2CD nicht benutzen! Sobald ein Knoten tatsächlich umbenannt
-             * wird, verliert dieser Knoten alle Kinder! Grund unklar.
+            /*
+              Don't use:
+              Abstract2CD nicht benutzen! Sobald ein Knoten tatsächlich umbenannt
+              wird, verliert dieser Knoten alle Kinder! Grund unklar.
              */
             // System.out.println(cmmlInfo.abstract2CDs().toString());
 
