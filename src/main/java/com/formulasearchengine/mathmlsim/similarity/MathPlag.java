@@ -67,9 +67,10 @@ public class MathPlag {
         try {
             CMMLInfo refDoc = new CMMLInfo(refMathML);
             CMMLInfo compDoc = new CMMLInfo(compMathML);
+            // compute factors
             final Integer depth = compDoc.getDepth(refDoc.getXQuery());
             final Double coverage = compDoc.getCoverage(refDoc.getElements());
-            Boolean formula = compDoc.isEquation();
+            Boolean formula = compDoc.isEquation(true);
             Boolean structMatch = compDoc.toStrictCmml().abstract2CDs()
                     .isMatch(refDoc.toStrictCmml().abstract2CDs().getXQuery());
             Boolean dataMatch = new CMMLInfo(compMathML).toDataCmml().abstract2DTs()
