@@ -5,7 +5,6 @@ import com.formulasearchengine.mathmlsim.similarity.node.MathNode;
 import com.formulasearchengine.mathmlsim.similarity.result.Match;
 import com.formulasearchengine.mathmltools.mml.CMMLInfo;
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.text.IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace;
 import static org.junit.Assert.*;
 
 /**
@@ -48,7 +48,7 @@ public class SubTreeComparisonTest {
 
         // valide the similarities as a JSON string
         String expected = IOUtils.toString(this.getClass().getResourceAsStream(basicFilename + "_expected.txt"), "UTF-8");
-        Assert.assertThat(actual, CoreMatchers.equalTo(expected));
+        Assert.assertThat(actual, equalToIgnoringWhiteSpace(expected));
     }
 
     @Test
