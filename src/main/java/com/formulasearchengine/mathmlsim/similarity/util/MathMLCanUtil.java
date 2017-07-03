@@ -2,8 +2,11 @@ package com.formulasearchengine.mathmlsim.similarity.util;
 
 import cz.muni.fi.mir.mathmlcanonicalization.ConfigException;
 import cz.muni.fi.mir.mathmlcanonicalization.MathMLCanonicalizer;
+import cz.muni.fi.mir.mathmlcanonicalization.modules.ModuleException;
 import org.apache.commons.io.IOUtils;
+import org.jdom2.JDOMException;
 
+import javax.xml.stream.XMLStreamException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,23 +37,21 @@ public class MathMLCanUtil {
      *
      * @param mathml MathML string
      * @return Canonicalized MathML string
+     * @throws JDOMException                       problem with DOM
+     * @throws IOException                         problem with streams
+     * @throws ModuleException                     some module cannot canonicalize the input
+     * @throws javax.xml.stream.XMLStreamException an error with XML processing occurs
      */
-    public static String canonicalize(String mathml) {
-        try {
-            InputStream input = IOUtils.toInputStream(mathml, StandardCharsets.UTF_8.toString());
-            final ByteArrayOutputStream output = new ByteArrayOutputStream();
-            canonicalizer.canonicalize(input, output);
-            String result = output.toString(StandardCharsets.UTF_8.toString());
-            // xml header will not be used
-            if (result.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n")) {
-                result = result.substring("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n".length());
-            }
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+    public static String canonicalize(String mathml) throws IOException, JDOMException, XMLStreamException, ModuleException {
+        InputStream input = IOUtils.toInputStream(mathml, StandardCharsets.UTF_8.toString());
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        canonicalizer.canonicalize(input, output);
+        String result = output.toString(StandardCharsets.UTF_8.toString());
+        // xml header will not be used
+        if (result.contains("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n")) {
+            result = result.substring("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n".length());
         }
-
+        return result.replaceAll("\\r\\n", System.getProperty("line.separator"));
     }
 
 }
