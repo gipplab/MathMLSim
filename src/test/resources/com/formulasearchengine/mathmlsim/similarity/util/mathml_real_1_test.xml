@@ -1,0 +1,59 @@
+<mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          id="M3"
+          name="1752-0509-7-134-i3"
+          overflow="scroll">
+    <mml:mrow>
+        <mml:mstyle displaystyle="true">
+            <mml:munder>
+                <mml:mo mathsize="big">∑</mml:mo>
+                <mml:mrow>
+                    <mml:mi>i</mml:mi>
+                    <mml:mo>∈</mml:mo>
+                    <mml:mi>C</mml:mi>
+                </mml:mrow>
+            </mml:munder>
+            <mml:mrow>
+                <mml:msub>
+                    <mml:mrow>
+                        <mml:mi>u</mml:mi>
+                    </mml:mrow>
+                    <mml:mrow>
+                        <mml:mi mathvariant="italic">ik</mml:mi>
+                    </mml:mrow>
+                </mml:msub>
+            </mml:mrow>
+        </mml:mstyle>
+        <mml:mo>=</mml:mo>
+        <mml:mstyle displaystyle="true">
+            <mml:munder>
+                <mml:mo mathsize="big">∑</mml:mo>
+                <mml:mrow>
+                    <mml:mi>j</mml:mi>
+                    <mml:mo>∈</mml:mo>
+                    <mml:mi>C</mml:mi>
+                </mml:mrow>
+            </mml:munder>
+            <mml:mrow>
+                <mml:msub>
+                    <mml:mrow>
+                        <mml:mi>u</mml:mi>
+                    </mml:mrow>
+                    <mml:mrow>
+                        <mml:mi mathvariant="italic">kj</mml:mi>
+                    </mml:mrow>
+                </mml:msub>
+            </mml:mrow>
+        </mml:mstyle>
+        <mml:mo>∀</mml:mo>
+        <mml:mi>k</mml:mi>
+        <mml:mo>∈</mml:mo>
+        <mml:mi>C</mml:mi>
+        <mml:mo>;</mml:mo>
+        <mml:mi>k</mml:mi>
+        <mml:mo>≠</mml:mo>
+        <mml:mo>α</mml:mo>
+        <mml:mo>,</mml:mo>
+        <mml:mo>β</mml:mo>
+    </mml:mrow>
+</mml:math>
