@@ -1,0 +1,3 @@
+[submodule "MathMLTools"]
+	path = MathMLTools
+	url = https://github.com/vstange/MathMLTools
