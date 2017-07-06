@@ -5,6 +5,9 @@ import com.formulasearchengine.mathmlsim.similarity.util.XMLUtils;
 import com.formulasearchengine.mathmltools.mml.CMMLInfo;
 import org.w3c.dom.Node;
 
+import javax.xml.xpath.XPathExpressionException;
+import java.util.Optional;
+
 /**
  * This class converts MathML (Content MathML) into our own
  * math expression tree representation of a mathematical
@@ -21,18 +24,27 @@ public class MathNodeGenerator {
      * @return first MathNode representing the root of the MET
      */
     public static MathNode generateMathNode(CMMLInfo cmmlInfo) {
-        return generateMathNode(CMMLHelper.getFirstCmmlNode(cmmlInfo));
+        Optional.ofNullable(cmmlInfo).orElseThrow(() -> new NullPointerException("cmml document is null"));
+        try {
+            return generateMathNode(CMMLHelper.getFirstApplyNode(cmmlInfo));
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
      * Create a math expression tree (MET) starting from the root element of a
      * Content MathML document.
      *
-     * @param cmmlRoot root element of a CMML document.
+     * @param applyRoot root apply element of a CMML document.
      * @return first MathNode representing the root of the MET
      */
-    public static MathNode generateMathNode(Node cmmlRoot) {
-        MathNode mathNode = createMathNode(cmmlRoot, 0);
+    public static MathNode generateMathNode(Node applyRoot) {
+        // null check
+        Optional.ofNullable(applyRoot).orElseThrow(() -> new NullPointerException("apply element is missing"));
+
+        MathNode mathNode = createMathNode(applyRoot, 0);
         // compute the maximum depth at least once after creation to define it for each branch.
         if (mathNode != null) {
             mathNode.getMaxDepth();

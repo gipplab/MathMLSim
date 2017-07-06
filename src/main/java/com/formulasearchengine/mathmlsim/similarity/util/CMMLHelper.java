@@ -6,6 +6,7 @@ import org.w3c.dom.Node;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 
 /**
  * The class contains static methods for direct access
@@ -13,6 +14,7 @@ import javax.xml.xpath.XPathConstants;
  *
  * @author Vincent Stange
  */
+@SuppressWarnings("ALL")
 public class CMMLHelper {
 
     /**
@@ -21,10 +23,10 @@ public class CMMLHelper {
      * @param mathml full MathML document
      * @return first node of the MathML-Content annotations within a MathML document
      */
-    public static Node getCmml(String mathml) {
+    public static Node getFirstApplyNode(String mathml) {
         try {
             // get the apply node of the ContentMathML root
-            return getFirstCmmlNode(new CMMLInfo(mathml));
+            return getFirstApplyNode(new CMMLInfo(mathml));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -52,7 +54,7 @@ public class CMMLHelper {
             // System.out.println(cmmlInfo.abstract2CDs().toString());
 
             // and finally only get the first apply node of the ContentMathML
-            return getFirstCmmlNode(cmmlInfo);
+            return getFirstApplyNode(cmmlInfo);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -66,19 +68,34 @@ public class CMMLHelper {
      *
      * @param cmmlInfo CMMLInfo document
      * @return first node of the MathML-Content annotations within a MathML document
+     * @throws XPathExpressionException parser exception
      */
-    public static Node getFirstCmmlNode(CMMLInfo cmmlInfo) {
-        try {
-            XPath xpath = XMLHelper.namespaceAwareXpath("m", CMMLInfo.NS_MATHML);
-            Node applyRoot = (Node) xpath.compile("*//m:annotation-xml[@encoding='MathML-Content']/m:apply").evaluate(cmmlInfo, XPathConstants.NODE);
+    public static Node getFirstApplyNode(CMMLInfo cmmlInfo) throws XPathExpressionException {
+        // 1. search for a separate cmml semantic
+        XPath xpath = XMLHelper.namespaceAwareXpath("m", CMMLInfo.NS_MATHML);
+        Node applyRoot = getElement(cmmlInfo, "*:math/*:semantics/*:annotation-xml[@encoding='MathML-Content']/*:apply", xpath);
+        if (applyRoot == null) {
+            // 2. search for a main cmml semantic
+            applyRoot = getElement(cmmlInfo, "*//m:semantics/m:apply", xpath);
             if (applyRoot == null) {
-                applyRoot = (Node) xpath.compile("*//m:semantics/m:apply").evaluate(cmmlInfo, XPathConstants.NODE);
+                // 3. try to take the apply right beneath the math elements
+                applyRoot = getElement(cmmlInfo, "*//m:semantics/m:apply", xpath);
             }
-            return applyRoot;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
+        return applyRoot;
+    }
+
+    /**
+     * Extracts a single node for the specified XPath expression.
+     *
+     * @param node  the node
+     * @param xExpr expression
+     * @param xPath the x path
+     * @return Node
+     * @throws XPathExpressionException the xpath expression exception
+     */
+    public static Node getElement(Node node, String xExpr, XPath xPath) throws XPathExpressionException {
+        return (Node) xPath.compile(xExpr).evaluate(node, XPathConstants.NODE);
     }
 
 }

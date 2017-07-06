@@ -17,7 +17,7 @@ public class MathNodeGeneratorTest {
     @Test
     public void generateMathNode_normal() throws Exception {
         // mathml from latexml and just get the cmml semantics
-        testConverterOnFile(CMMLHelper::getCmml, "mathnode1", false);
+        testConverterOnFile(CMMLHelper::getFirstApplyNode, "mathnode1", false);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class MathNodeGeneratorTest {
     @Test
     public void generateMathNode_mathoid_normal() throws Exception {
         // mathml from mathoid and get the cmml semantics
-        testConverterOnFile(CMMLHelper::getCmml, "mathnode3", false);
+        testConverterOnFile(CMMLHelper::getFirstApplyNode, "mathnode3", false);
     }
 
     @Test
@@ -43,8 +43,9 @@ public class MathNodeGeneratorTest {
         String mathml = IOUtils.toString(this.getClass().getResourceAsStream(basicFilename + "_test.txt"), "UTF-8");
         MathNode mathNode = MathNodeGenerator.generateMathNode(convert.apply(mathml));
 
-        if (checkAbstract)
+        if (checkAbstract) {
             mathNode = MathNodeGenerator.toAbstract(mathNode);
+        }
 
         Assert.assertThat(MathNodeGenerator.print(mathNode, ""), CoreMatchers.equalTo(expected));
     }

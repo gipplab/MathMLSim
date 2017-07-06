@@ -22,6 +22,12 @@
             <organization>Universität Konstanz</organization>
             <organizationUrl>http://www.uni.kn</organizationUrl>
         </developer>
+        <developer>
+            <name>Vincent Stange</name>
+            <email>vinc.sohn@gmail.com</email>
+            <organization>Universität Konstanz</organization>
+            <organizationUrl>http://www.uni.kn</organizationUrl>
+        </developer>
     </developers>
     <scm>
         <connection>scm:git:git@github.com:ag-gipp/mathmlsim.git</connection>
