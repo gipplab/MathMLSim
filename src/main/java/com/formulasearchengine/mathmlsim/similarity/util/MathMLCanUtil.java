@@ -22,6 +22,7 @@ public class MathMLCanUtil {
     private static final MathMLCanonicalizer canonicalizer;
 
     static {
+        // load our custom configuration and the canonicalizer itself
         try (InputStream configIS = MathMLCanUtil.class.getClassLoader()
                 .getResourceAsStream("com/formulasearchengine/mathmlsim/similarity/util/canonicalizer-config.xml")) {
             canonicalizer = new MathMLCanonicalizer(configIS);
@@ -34,6 +35,7 @@ public class MathMLCanUtil {
 
     /**
      * Canonicalize an input MathML string.
+     * Line separators are system dependant.
      *
      * @param mathml MathML string
      * @return Canonicalized MathML string

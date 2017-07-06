@@ -31,8 +31,9 @@ public class XMLUtils {
         ArrayList<Element> childElements = new ArrayList<>();
         NodeList childNodes = node.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
-            if (childNodes.item(i) instanceof Element)
+            if (childNodes.item(i) instanceof Element) {
                 childElements.add((Element) childNodes.item(i));
+            }
         }
         return childElements;
     }
