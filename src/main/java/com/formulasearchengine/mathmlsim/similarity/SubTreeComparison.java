@@ -77,8 +77,9 @@ public class SubTreeComparison {
         for (MathNode compChild : comTree.getChildren()) {
             // don't look at leafs if it is already marked
             // or we only want to compare branching nodes
-            if (compChild.isMarked() || onlyOperators && compChild.isLeaf())
+            if (compChild.isMarked() || onlyOperators && compChild.isLeaf()) {
                 continue;
+            }
             // go deeper in the comp. tree but hold the ref tree
             if (findSimilarities(refTree, compChild, similarities, true, onlyOperators)) {
                 return true;
@@ -88,9 +89,9 @@ public class SubTreeComparison {
         if (!holdRefTree) {
             // go deeper in the reference tree
             for (MathNode refChild : refTree.getChildren()) {
-                if (onlyOperators && refChild.isLeaf())
+                if (onlyOperators && refChild.isLeaf()) {
                     continue;
-
+                }
                 findSimilarities(refChild, comTree, similarities, false, onlyOperators);
             }
         }
@@ -170,5 +171,4 @@ public class SubTreeComparison {
         tmp.removeAll(refLeafs);
         return 1 - (double) tmp.size() / (double) compLeafs.size();
     }
-
 }

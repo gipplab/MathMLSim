@@ -61,7 +61,7 @@
         <module name="SimplifyBooleanExpression" />
         <module name="SimplifyBooleanReturn" />
         <module name="StringLiteralEquality" />
-        <module name="AvoidStarImport" />
+        <!--<module name="AvoidStarImport" />-->
         <module name="AvoidStaticImport">
             <property name="excludes" value="org.junit.Assert.*"/>
         </module>

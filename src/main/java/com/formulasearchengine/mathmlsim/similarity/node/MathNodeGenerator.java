@@ -12,10 +12,16 @@ import java.util.Optional;
  * This class converts MathML (Content MathML) into our own
  * math expression tree representation of a mathematical
  * formula. (CMML document > MathNode)
+ * <br/>
+ * This is purely a utility class and therefore has no public constructor.
  *
  * @author Vincent Stange
  */
 public class MathNodeGenerator {
+
+    private MathNodeGenerator() {
+        // not visible, utility class only
+    }
 
     /**
      * Create a math expression tree (MET) starting from an CMMLInfo document.
@@ -110,10 +116,9 @@ public class MathNodeGenerator {
      * @param indent starting line used as an indent (e.g. start with "")
      * @return return a tree representation of itself
      */
-    public static String print(MathNode node, String indent) {
+    public static String printMathNode(MathNode node, String indent) {
         StringBuilder sb = new StringBuilder(indent + node.toString() + "\n");
-        node.getChildren().forEach(n -> sb.append(print(n, indent + " ")));
+        node.getChildren().forEach(n -> sb.append(printMathNode(n, indent + " ")));
         return sb.toString();
     }
-
 }

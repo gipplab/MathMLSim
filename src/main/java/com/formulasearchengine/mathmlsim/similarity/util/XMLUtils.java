@@ -14,12 +14,16 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 
 /**
- * Utility class with static methods to print or navigate through
+ * Utility class with static methods to printMathNode or navigate through
  * XML document nodes.
  *
  * @author Vincent Stange
  */
 public class XMLUtils {
+
+    private XMLUtils() {
+        // not visible, utility class only
+    }
 
     /**
      * Only return child nodes that are elements - text nodes are ignored.
@@ -39,21 +43,10 @@ public class XMLUtils {
     }
 
     /**
-     * Prints out a XML node as a String formatted with indent.
-     *
-     * @param node node to be printed
-     * @return String representation
-     * @throws TransformerException not xml conform
-     */
-    public static String nodeToString(Node node) throws TransformerException {
-        return nodeToString(node, true);
-    }
-
-    /**
      * Prints out a XML node as a String.
      *
      * @param node   node to be printed
-     * @param indent pretty print via indent on?
+     * @param indent pretty printMathNode via indent on?
      * @return String representation
      * @throws TransformerException mostly not xml conform
      */

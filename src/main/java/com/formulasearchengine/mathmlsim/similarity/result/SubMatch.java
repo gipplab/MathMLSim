@@ -11,15 +11,15 @@ import com.formulasearchengine.mathmlsim.similarity.node.MathNode;
  */
 public class SubMatch {
 
-    public String id = "";
+    private String id = "";
 
-    public double assessment = 1.0;
+    private double assessment = 1.0;
 
-    public int depth = 0;
+    private int depth = 0;
 
-    public double coverage = 0;
+    private double coverage = 0;
 
-    public String type = "similar";
+    private String type = "similar";
 
     /**
      * Create a sub-match. A sub-match is always part of a match.
@@ -53,5 +53,25 @@ public class SubMatch {
         int maxDepth = compTree.getMaxDepth() + 1;
         double depthWeight = 1 - (double) absDiff / (double) maxDepth;
         return depthWeight * coverage;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public double getAssessment() {
+        return assessment;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public double getCoverage() {
+        return coverage;
+    }
+
+    public String getType() {
+        return type;
     }
 }

@@ -19,10 +19,14 @@ import java.util.Map;
  */
 public class MathPlag {
 
+    private MathPlag() {
+        // not visible, utility class only
+    }
+
     /**
      * Compare two CMMLInfo document against each other. The type defines how a Match will be displayed.
      *
-     * @param refMathML Reference MathML string (must contain pMML and cMML)
+     * @param refMathML  Reference MathML string (must contain pMML and cMML)
      * @param compMathML Comparison MathML string (must contain pMML and cMML)
      * @return list of matches / similarities, list can be empty.
      */
@@ -46,7 +50,7 @@ public class MathPlag {
     /**
      * Compare two CMMLInfo document against each other. The type defines how a Match will be displayed.
      *
-     * @param refMathML Reference MathML string (must contain pMML and cMML)
+     * @param refMathML  Reference MathML string (must contain pMML and cMML)
      * @param compMathML Comparison MathML string (must contain pMML and cMML)
      * @return list of matches / similarities, list can be empty.
      */
@@ -57,9 +61,9 @@ public class MathPlag {
     }
 
     /**
-     * Old score - this is basically a print out for comparison and be deleted later on
+     * Old score - this is basically a printMathNode out for comparison and be deleted later on
      *
-     * @param refMathML Reference MathML string (must contain pMML and cMML)
+     * @param refMathML  Reference MathML string (must contain pMML and cMML)
      * @param compMathML Comparison MathML string (must contain pMML and cMML)
      * @return ap of all found factors
      */
@@ -88,5 +92,4 @@ public class MathPlag {
             return null;
         }
     }
-
 }

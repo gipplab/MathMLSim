@@ -17,6 +17,10 @@ import javax.xml.xpath.XPathExpressionException;
 @SuppressWarnings("ALL")
 public class CMMLHelper {
 
+    private CMMLHelper() {
+        // not visible, utility class only
+    }
+
     /**
      * Get the first node of the MathML-Content annotations within a MathML document.
      *
@@ -97,5 +101,4 @@ public class CMMLHelper {
     public static Node getElement(Node node, String xExpr, XPath xPath) throws XPathExpressionException {
         return (Node) xPath.compile(xExpr).evaluate(node, XPathConstants.NODE);
     }
-
 }
