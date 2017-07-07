@@ -41,10 +41,10 @@ public class MathPlagTest {
         List<Match> simMatch = MathPlag.compareSimilarMathML(refMathML, compMathML);
         assertThat(simMatch, notNullValue());
         assertThat(simMatch.size(), is(1));
-        assertThat(simMatch.get(0).id, is("p1.1.m1.1.4.cmml"));
+        assertThat(simMatch.get(0).getId(), is("p1.1.m1.1.4.cmml"));
         // The query should be completely found inside the comparisonMathML, depth is therefor = 0
-        assertThat(simMatch.get(0).depth, is(0)); // depth in ref tree
-        assertThat(simMatch.get(0).matches.get(0).depth, is(0)); // depth in comp tree
+        assertThat(simMatch.get(0).getDepth(), is(0)); // depth in ref tree
+        assertThat(simMatch.get(0).getMatches().get(0).getDepth(), is(0)); // depth in comp tree
     }
 
     @Test
@@ -65,8 +65,8 @@ public class MathPlagTest {
         List<Match> matches = MathPlag.compareIdenticalMathML(refMathML, compMathML);
         assertThat(matches, notNullValue());
         assertThat(matches.size(), is(1));
-        assertThat(matches.get(0).id, is("p1.1.m1.1.4.cmml"));
-        assertThat(matches.get(0).coverage, is(1.0));
+        assertThat(matches.get(0).getId(), is("p1.1.m1.1.4.cmml"));
+        assertThat(matches.get(0).getCoverage(), is(1.0));
     }
 
     @Test
@@ -92,11 +92,9 @@ public class MathPlagTest {
         assertThat(simMatch, notNullValue());
         assertThat(simMatch.size(), is(1));
         // the query has no id attribute for the qvar element
-        assertThat(simMatch.get(0).id, nullValue());
+        assertThat(simMatch.get(0).getId(), nullValue());
         // The query should be completely found inside the comparisonMathML, depth is therefor = 1
-        assertThat(simMatch.get(0).depth, is(1));
-        assertThat(simMatch.get(0).matches.get(0).depth, is(1));
-
+        assertThat(simMatch.get(0).getDepth(), is(1));
+        assertThat(simMatch.get(0).getMatches().get(0).getDepth(), is(1));
     }
-
 }

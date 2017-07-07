@@ -47,7 +47,7 @@ public class MathNodeGeneratorTest {
             mathNode = MathNodeGenerator.toAbstract(mathNode);
         }
 
-        Assert.assertThat(MathNodeGenerator.print(mathNode, ""), CoreMatchers.equalTo(expected));
+        Assert.assertThat(MathNodeGenerator.printMathNode(mathNode, ""), CoreMatchers.equalTo(expected));
     }
 
 }

@@ -19,13 +19,13 @@ public class Match {
         similar, identical
     }
 
-    public String id = "";
+    private String id = "";
 
-    public int depth = 0;
+    private int depth = 0;
 
-    public double coverage = 0;
+    private double coverage = 0;
 
-    public List<SubMatch> matches = new ArrayList<>();
+    private List<SubMatch> matches = new ArrayList<>();
 
     /**
      * Create a match. A match must always contain sub-matches.
@@ -49,4 +49,19 @@ public class Match {
         return subMatch;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public double getCoverage() {
+        return coverage;
+    }
+
+    public List<SubMatch> getMatches() {
+        return matches;
+    }
 }

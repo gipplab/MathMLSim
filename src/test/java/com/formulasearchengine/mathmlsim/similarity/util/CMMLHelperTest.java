@@ -1,12 +1,9 @@
 package com.formulasearchengine.mathmlsim.similarity.util;
 
-import com.formulasearchengine.mathmltools.mml.CMMLInfo;
+import org.junit.Assert;
 import org.junit.Test;
-import org.w3c.dom.Node;
 
 /**
- * TODO
- *
  * @author Vincent Stange
  */
 public class CMMLHelperTest {
@@ -102,9 +99,7 @@ public class CMMLHelperTest {
                 "    </annotation-xml>\n" +
                 "  </semantics>\n" +
                 "</math>";
-
-        Node abstractCmml = CMMLHelper.getStrictCmml(mathml);
-        // TODO compare
+        Assert.assertNotNull(CMMLHelper.getStrictCmml(mathml));
     }
 
 }

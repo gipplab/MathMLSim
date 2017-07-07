@@ -43,12 +43,26 @@ public class MathNode {
      */
     private boolean orderSensitive = true;
 
+    /**
+     * The depth of the current node inside the full tree, start by 1
+     * 0 = start value / unknown
+     */
     private int depth = 0;
 
+    /**
+     * Maximum depth of all child nodes from this node onwards.
+     */
     private int maxDepth = 0;
 
+    /**
+     * Marked nodes will not be visited again by the sub-tree-comparison algorithm.
+     */
     private boolean marked = false;
 
+    /**
+     * If this node should be compared based of the abstract / stricts semantics.
+     * This option changes the equals-behavior.
+     */
     private boolean abstractNode = false;
 
     public MathNode() {
@@ -66,8 +80,9 @@ public class MathNode {
     private ArrayList<MathNode> children = new ArrayList<>();
 
     public void setAttributes(NamedNodeMap attributes) {
-        if (attributes == null)
+        if (attributes == null) {
             return;
+        }
         // extract all attributes into a simple map
         int numAttrs = attributes.getLength();
         for (int i = 0; i < numAttrs; i++) {
@@ -121,8 +136,9 @@ public class MathNode {
     }
 
     public void addChild(MathNode child) {
-        if (child == null)
+        if (child == null) {
             return;
+        }
         if (child.getName() != null && "plus times".contains(child.getName())) {
             orderSensitive = false;
         }
@@ -162,40 +178,62 @@ public class MathNode {
         // if this is an apply node, the first child is an
         // operation-node not a constant or number leaf
         int startIdx = "apply".equals(getName()) ? 1 : 0;
-        for(int i = startIdx; i < children.size(); i ++) {
+        for (int i = startIdx; i < children.size(); i++) {
             unterlings.addAll(children.get(i).getLeafs());
         }
         return unterlings;
     }
 
+    private int setMaxDepth(int maxDepth) {
+        this.maxDepth = maxDepth;
+        return this.maxDepth;
+    }
+
+    /**
+     * This method returns the maximum depth of the current branch from this node
+     * onwards.
+     * <br/>
+     * Example: If this node has only one child with a depth of 3. This node will also
+     * return 3, since the child is the deepest node in the current branch.
+     * <br/>
+     * If this is called on the root node, it will return the maximum depth of the whole
+     * tree.
+     *
+     * @return maximum depth of the current branch
+     */
     public int getMaxDepth() {
         if (isLeaf()) {
             // set and return at the same time
-            return maxDepth = depth;
+            return setMaxDepth(depth);
         }
         if (maxDepth == 0) {
-            maxDepth = children.stream()
+            setMaxDepth(children.stream()
                     .max((c1, c2) -> Math.max(c1.getMaxDepth(), c2.getMaxDepth()))
-                    .get().getDepth();
+                    .get().getDepth());
         }
         return maxDepth;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         MathNode mathNode = (MathNode) o;
 
-        if (name != null ? !name.equals(mathNode.name) : mathNode.name != null) return false;
+        if (name != null ? !name.equals(mathNode.name) : mathNode.name != null) {
+            return false;
+        }
         if (isAbstractNode()) {
             // this is a abstractNode node, value check is not applied
             return true;
         } else {
             return value != null ? value.equals(mathNode.value) : mathNode.value == null;
         }
-
     }
 
     @Override
@@ -223,5 +261,4 @@ public class MathNode {
     public String toString() {
         return String.format("%s:%s", name, value);
     }
-
 }
