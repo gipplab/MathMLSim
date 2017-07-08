@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertThat;
 public class MathPlagTest {
 
     @Test
-    public void complexRun_all() throws IOException, ParserConfigurationException, TransformerException {
+    public void complexRun_all() throws IOException, ParserConfigurationException, TransformerException, XPathExpressionException {
         // prepare two mathml files, cmml is in the annotate element
         String refMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_complex_1.xml"), "UTF-8");
         String compMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_complex_2.xml"), "UTF-8");
@@ -48,7 +49,7 @@ public class MathPlagTest {
     }
 
     @Test
-    public void simpleRun_identical_1() throws IOException, ParserConfigurationException, TransformerException {
+    public void simpleRun_identical_1() throws IOException, ParserConfigurationException, TransformerException, XPathExpressionException {
         // prepare two mathml files, cmml is in the annotate element
         String refMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_annotation_1.xml"), "UTF-8");
         String compMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_annotation_2.xml"), "UTF-8");
@@ -70,7 +71,7 @@ public class MathPlagTest {
     }
 
     @Test
-    public void simpleRun_similar_1() throws IOException, ParserConfigurationException, TransformerException {
+    public void simpleRun_similar_1() throws IOException, ParserConfigurationException, TransformerException, XPathExpressionException {
         // prepare two mathml files, cmml is in the annotate element
         String refMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_query_pure_1.xml"), "UTF-8");
         String compMathML = IOUtils.toString(this.getClass().getResourceAsStream("mathml_annotation_3.xml"), "UTF-8");
