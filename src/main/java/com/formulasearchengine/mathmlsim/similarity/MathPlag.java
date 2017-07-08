@@ -4,20 +4,28 @@ import com.formulasearchengine.mathmlsim.similarity.node.MathNode;
 import com.formulasearchengine.mathmlsim.similarity.node.MathNodeGenerator;
 import com.formulasearchengine.mathmlsim.similarity.result.Match;
 import com.formulasearchengine.mathmltools.mml.CMMLInfo;
+import org.apache.log4j.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * This class is still in progress.
- * In its current form it will be used for the VMEXT demo.
+ * This class provides methods to compare mathematical expression in
+ * MathML format. The input can either be as a string or {@link CMMLInfo}
+ * object. In the first case the string will converters into the latter.
+ * <br/>
+ * At the moment this is purely a utility class and therefore
+ * has no public constructor. All methods are static.
  *
  * @author Vincent Stange
  */
 public class MathPlag {
+
+    private static Logger logger = Logger.getLogger(MathPlag.class);
 
     private MathPlag() {
         // not visible, utility class only
@@ -65,9 +73,12 @@ public class MathPlag {
      *
      * @param refMathML  Reference MathML string (must contain pMML and cMML)
      * @param compMathML Comparison MathML string (must contain pMML and cMML)
-     * @return ap of all found factors
+     * @return map of all found factors
+     * @throws ParserConfigurationException malformed mathml or even xml in most cases
+     * @throws XPathExpressionException could hint towards a bug
+     * @throws IOException transformation exception between document and string
      */
-    public static Map<String, Object> compareOriginalFactors(String refMathML, String compMathML) {
+    public static Map<String, Object> compareOriginalFactors(String refMathML, String compMathML) throws ParserConfigurationException, XPathExpressionException, IOException {
         try {
             CMMLInfo refDoc = new CMMLInfo(refMathML);
             CMMLInfo compDoc = new CMMLInfo(compMathML);
@@ -88,8 +99,9 @@ public class MathPlag {
             result.put("formula", formula);
             return result;
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            // log and throw in this case
+            logger.error("mathml comparison failed", e);
+            throw e;
         }
     }
 }

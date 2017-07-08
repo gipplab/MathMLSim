@@ -3,6 +3,7 @@ package com.formulasearchengine.mathmlsim.similarity.node;
 import com.formulasearchengine.mathmlsim.similarity.util.CMMLHelper;
 import com.formulasearchengine.mathmlsim.similarity.util.XMLUtils;
 import com.formulasearchengine.mathmltools.mml.CMMLInfo;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
 
 import javax.xml.xpath.XPathExpressionException;
@@ -19,6 +20,8 @@ import java.util.Optional;
  */
 public class MathNodeGenerator {
 
+    private static Logger logger = Logger.getLogger(MathNodeGenerator.class);
+
     private MathNodeGenerator() {
         // not visible, utility class only
     }
@@ -27,14 +30,14 @@ public class MathNodeGenerator {
      * Create a math expression tree (MET) starting from an CMMLInfo document.
      *
      * @param cmmlInfo CMMLInfo document
-     * @return first MathNode representing the root of the MET
+     * @return first MathNode representing the root of the MET, or null
      */
     public static MathNode generateMathNode(CMMLInfo cmmlInfo) {
         Optional.ofNullable(cmmlInfo).orElseThrow(() -> new NullPointerException("cmml document is null"));
         try {
             return generateMathNode(CMMLHelper.getFirstApplyNode(cmmlInfo));
         } catch (XPathExpressionException e) {
-            e.printStackTrace();
+            logger.error("could not generate a math node tree", e);
             return null;
         }
     }
