@@ -2,6 +2,7 @@ package com.formulasearchengine.mathmlsim.similarity.util;
 
 import com.formulasearchengine.mathmltools.mml.CMMLInfo;
 import com.formulasearchengine.mathmltools.xmlhelper.XMLHelper;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
 
 import javax.xml.xpath.XPath;
@@ -14,8 +15,9 @@ import javax.xml.xpath.XPathExpressionException;
  *
  * @author Vincent Stange
  */
-@SuppressWarnings("ALL")
 public class CMMLHelper {
+
+    private static Logger logger = Logger.getLogger(CMMLHelper.class);
 
     private CMMLHelper() {
         // not visible, utility class only
@@ -32,7 +34,7 @@ public class CMMLHelper {
             // get the apply node of the ContentMathML root
             return getFirstApplyNode(new CMMLInfo(mathml));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("failed to get apply node", e);
             return null;
         }
     }
@@ -53,14 +55,14 @@ public class CMMLHelper {
             /*
               Don't use:
               Abstract2CD nicht benutzen! Sobald ein Knoten tatsächlich umbenannt
-              wird, verliert dieser Knoten alle Kinder! Grund unklar.
+              wird, verliert dieser Knoten alle Kinder! Stattdessen kann auf dem
+              späteren MathNode ein separater toAbstract aufruf erfolgen.
              */
-            // System.out.println(cmmlInfo.abstract2CDs().toString());
 
             // and finally only get the first apply node of the ContentMathML
             return getFirstApplyNode(cmmlInfo);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("failed to get apply node", e);
             return null;
         }
     }
