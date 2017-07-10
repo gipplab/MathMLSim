@@ -12,3 +12,15 @@ Similarity calculation module for MathML formulae
  MathML representation (It will read the content semantics). The input can either be
  as a string or CMMLInfo object. In the first case the string will be converted into
  the latter.
+ 
+## Dependencies ##
+ 
+Note-worthy dependencies for this library.
+ 
+**MathML Tools**: Library with various tools for processing MathML using Java. (https://github.com/physikerwelt/MathMLTools)
+ 
+    <dependency>
+        <groupId>com.formulasearchengine</groupId>
+        <artifactId>mathmltools</artifactId>
+        <version>...</version>
+    </dependency>
