@@ -85,7 +85,7 @@ public class CMMLHelper {
             applyRoot = getElement(cmmlInfo, "*//m:semantics/m:apply", xpath);
             if (applyRoot == null) {
                 // 3. try to take the apply right beneath the math elements
-                applyRoot = getElement(cmmlInfo, "*//m:semantics/m:apply", xpath);
+                applyRoot = getElement(cmmlInfo, "*:math/m:apply", xpath);
             }
         }
         return applyRoot;
