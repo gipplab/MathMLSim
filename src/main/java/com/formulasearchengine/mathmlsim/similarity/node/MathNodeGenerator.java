@@ -27,10 +27,10 @@ public class MathNodeGenerator {
     }
 
     /**
-     * Create a math expression tree (MET) starting from an CMMLInfo document.
+     * Create a math expression tree (MEXT) starting from an CMMLInfo document.
      *
      * @param cmmlInfo CMMLInfo document
-     * @return first MathNode representing the root of the MET, or null
+     * @return first MathNode representing the root of the MEXT, or null
      */
     public static MathNode generateMathNode(CMMLInfo cmmlInfo) {
         Optional.ofNullable(cmmlInfo).orElseThrow(() -> new NullPointerException("cmml document is null"));
@@ -43,11 +43,11 @@ public class MathNodeGenerator {
     }
 
     /**
-     * Create a math expression tree (MET) starting from the root element of a
+     * Create a math expression tree (MEXT) starting from the root element of a
      * Content MathML document.
      *
      * @param applyRoot root apply element of a CMML document.
-     * @return first MathNode representing the root of the MET
+     * @return first MathNode representing the root of the MEXT
      */
     public static MathNode generateMathNode(Node applyRoot) {
         // null check
@@ -62,7 +62,7 @@ public class MathNodeGenerator {
     }
 
     /**
-     * Recursive method to create a math expression tree (MET). Every child
+     * Recursive method to create a math expression tree (MEXT). Every child
      * and all attributes are considered in the conversion.
      *
      * @param node  current xml node in cmml, typically the root element
@@ -78,9 +78,10 @@ public class MathNodeGenerator {
             return null;
         }
         mathNode.setAttributes(node.getAttributes());
+        // TODO
         mathNode.setValue(node.getFirstChild() != null ? node.getFirstChild().getTextContent().trim() : node.getTextContent().trim());
         mathNode.setDepth(depth);
-        // iterate over all child elements
+        // iterate over all child elements - recursion
         XMLUtils.getChildElements(node).forEach(c -> mathNode.addChild(createMathNode(c, depth + 1)));
         return mathNode;
     }

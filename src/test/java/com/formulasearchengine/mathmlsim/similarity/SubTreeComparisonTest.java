@@ -2,12 +2,16 @@ package com.formulasearchengine.mathmlsim.similarity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formulasearchengine.mathmlsim.similarity.node.MathNode;
+import com.formulasearchengine.mathmlsim.similarity.node.MathNodeGenerator;
 import com.formulasearchengine.mathmlsim.similarity.result.Match;
+import com.formulasearchengine.mathmlsim.similarity.result.SimilarityType;
 import com.formulasearchengine.mathmltools.mml.CMMLInfo;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +31,7 @@ public class SubTreeComparisonTest {
         /*
         \EulerGamma@{z}=\Int{0}{\infty}@{t}{e^{-t}t^{z-1}}
         \EulerGamma@{z}=\Int{0}{\infty}@{x}{e^{-x}t^{z-1}}
-        I expect 3 similarities:
+        I expect 3 similarities (sub-trees) for:
         1. \EulerGamma@{z}
         2. t^{z-1}
         3. \Int{0} (in CMML this also is a tree branch on its own)
@@ -36,13 +40,11 @@ public class SubTreeComparisonTest {
     }
 
     private void testSimilarities(String basicFilename) throws Exception {
-        String mathmls = IOUtils.toString(this.getClass().getResourceAsStream(basicFilename + "_test.txt"), "UTF-8");
-        String[] split = mathmls.split("@@@"); // I use this as a simple split between two mathml's
-        CMMLInfo doc1 = new CMMLInfo(split[0].trim());
-        CMMLInfo doc2 = new CMMLInfo(split[1].trim());
+        MathNode refTree = readMathNodeFromFile(basicFilename + "_test_p1.txt");
+        MathNode compTree = readMathNodeFromFile(basicFilename + "_test_p2.txt");
 
         // run the comparison
-        List<Match> found = new SubTreeComparison("identical").getSimilarities(doc1, doc2, true);
+        List<Match> found = new SubTreeComparison(SimilarityType.identical).getSimilarities(refTree, compTree, true);
         // - and write the similarities as a string
         String actual = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(found);
 
@@ -51,9 +53,10 @@ public class SubTreeComparisonTest {
         Assert.assertThat(actual, equalToIgnoringWhiteSpace(expected));
     }
 
-    @Test
-    public void findSimilarities() throws Exception {
-
+    private MathNode readMathNodeFromFile(String filename) throws IOException, ParserConfigurationException {
+        // switch from a string to the CMMLInfo document and on to our MathNode representation
+        CMMLInfo doc = new CMMLInfo(IOUtils.toString(this.getClass().getResourceAsStream(filename), "UTF-8"));
+        return MathNodeGenerator.generateMathNode(new CMMLInfo(doc));
     }
 
     @Test
@@ -64,7 +67,7 @@ public class SubTreeComparisonTest {
         apply.addChild(new MathNode("y", null));
 
         // x-y = x-y
-        assertTrue(new SubTreeComparison("identical").isIdenticalTree(apply, apply));
+        assertTrue(new SubTreeComparison(SimilarityType.identical).isIdenticalTree(apply, apply));
     }
 
     @Test
@@ -81,7 +84,7 @@ public class SubTreeComparisonTest {
         apply2.addChild(new MathNode("cn", "2").setAbstractNode());
 
         // x+1 = y-2 - they have the same structure and the nodes are marked strict - this should be equal
-        assertTrue(new SubTreeComparison("identical").isIdenticalTree(apply, apply2));
+        assertTrue(new SubTreeComparison(SimilarityType.identical).isIdenticalTree(apply, apply2));
     }
 
     @Test
@@ -97,7 +100,7 @@ public class SubTreeComparisonTest {
         apply2.addChild(new MathNode("x", null));
 
         // x+y = y+x
-        assertTrue(new SubTreeComparison("identical").isIdenticalTree(apply1, apply2));
+        assertTrue(new SubTreeComparison(SimilarityType.identical).isIdenticalTree(apply1, apply2));
     }
 
     @Test
@@ -113,12 +116,12 @@ public class SubTreeComparisonTest {
         apply2.addChild(new MathNode("z", null));
 
         // x+y != x+z
-        assertFalse(new SubTreeComparison("identical").isIdenticalTree(apply1, apply2));
+        assertFalse(new SubTreeComparison(SimilarityType.identical).isIdenticalTree(apply1, apply2));
     }
 
     @Test
     public void filterSameChildren() throws Exception {
-        SubTreeComparison similar = new SubTreeComparison("similar");
+        SubTreeComparison similar = new SubTreeComparison(SimilarityType.similar);
         // prepare a list of children from an apply node
         List<MathNode> list = new ArrayList<>();
         list.add(new MathNode("plus", null));
