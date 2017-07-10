@@ -5,7 +5,7 @@ import com.formulasearchengine.mathmlsim.similarity.node.MathNode;
 
 /**
  * JSON wrapper for a single match between two math expression trees.
- * The Id relates to the comparison MET.
+ * The Id relates to the comparison MEXT.
  *
  * @author Vincent Stange
  */
@@ -28,9 +28,9 @@ public class SubMatch {
      *
      * @param refTree  partial reference tree (or full tree)
      * @param compTree partial comparison tree (or full tree)
-     * @param type     type of similarity
+     * @param type     type of similarity (identical or similar comparison)
      */
-    public SubMatch(MathNode refTree, MathNode compTree, Match.Type type) {
+    public SubMatch(MathNode refTree, MathNode compTree, SimilarityType type) {
         this.id = compTree.getId();
         this.depth = compTree.getDepth();
         this.type = type.name();

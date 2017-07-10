@@ -30,8 +30,9 @@ public class MathPlagTest {
         assertThat(result, notNullValue());
         assertThat(result.get("coverage"), is(1.0));
         assertThat(result.get("depth"), nullValue());
-        assertThat(result.get("structure match"), is(true));
-        assertThat(result.get("formula"), is(true));
+        assertThat(result.get("structureMatch"), is(true));
+        assertThat(result.get("dataMatch"), is(true));
+        assertThat(result.get("isEquation"), is(true));
 
         // test the identical mathplag results
         List<Match> identMatch = MathPlag.compareIdenticalMathML(refMathML, compMathML);
@@ -59,8 +60,9 @@ public class MathPlagTest {
         assertThat(result, notNullValue());
         assertThat(result.get("coverage"), is(1.0));
         assertThat(result.get("depth"), is(5));
-        assertThat(result.get("structure match"), is(true));
-        assertThat(result.get("formula"), is(false));
+        assertThat(result.get("structureMatch"), is(true));
+        assertThat(result.get("dataMatch"), is(true));
+        assertThat(result.get("isEquation"), is(false));
 
         // test the mathplag results
         List<Match> matches = MathPlag.compareIdenticalMathML(refMathML, compMathML);
@@ -80,8 +82,9 @@ public class MathPlagTest {
         assertThat(result, notNullValue());
         assertThat(result.get("coverage"), is(0.0));
         assertThat(result.get("depth"), nullValue());
-        assertThat(result.get("structure match"), is(true));
-        assertThat(result.get("formula"), is(true));
+        assertThat(result.get("structureMatch"), is(true));
+        assertThat(result.get("dataMatch"), is(true));
+        assertThat(result.get("isEquation"), is(true));
 
         // test the identical mathplag results
         List<Match> identMatch = MathPlag.compareIdenticalMathML(refMathML, compMathML);

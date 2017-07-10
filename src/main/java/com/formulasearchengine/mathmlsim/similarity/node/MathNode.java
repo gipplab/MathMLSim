@@ -6,13 +6,13 @@ import org.w3c.dom.Node;
 import java.util.*;
 
 /**
- * This object represents the node of a mathematic expression tree (MET).
+ * This object represents the node of a mathematic expression tree (MEXT).
  * <br/>
  * It is to simplify the tree comparison and avoid unnecessary complexity.
  * This object should not be dependent on the former document and any
  * namespace-dependent attributes should be ignored.
  * <br/>
- * If you start with this object, it is usually the root of a MET.
+ * If you start with this object, it is usually the root of a MEXT.
  *
  * @author Vincent Stange
  */

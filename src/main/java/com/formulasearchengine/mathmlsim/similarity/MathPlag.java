@@ -3,6 +3,7 @@ package com.formulasearchengine.mathmlsim.similarity;
 import com.formulasearchengine.mathmlsim.similarity.node.MathNode;
 import com.formulasearchengine.mathmlsim.similarity.node.MathNodeGenerator;
 import com.formulasearchengine.mathmlsim.similarity.result.Match;
+import com.formulasearchengine.mathmlsim.similarity.result.SimilarityType;
 import com.formulasearchengine.mathmltools.mml.CMMLInfo;
 import org.apache.log4j.Logger;
 
@@ -32,51 +33,50 @@ public class MathPlag {
     }
 
     /**
-     * Compare two CMMLInfo document against each other. The type defines how a Match will be displayed.
+     * Compare two MathML formulas against each other. The MathML string will be transformed into a {@link CMMLInfo}
+     * document and then to a {@link MathNode} tree.
+     * <br/>
+     * The formulas are compared to find identical structures.
      *
      * @param refMathML  Reference MathML string (must contain pMML and cMML)
      * @param compMathML Comparison MathML string (must contain pMML and cMML)
      * @return list of matches / similarities, list can be empty.
      */
     public static List<Match> compareIdenticalMathML(String refMathML, String compMathML) throws IOException, ParserConfigurationException {
-        return compareDocuments(new CMMLInfo(refMathML), new CMMLInfo(compMathML), "identical");
+        // switch from a string > CMMLInfo document > MathNode tree
+        MathNode refMathNode = MathNodeGenerator.generateMathNode(new CMMLInfo(refMathML));
+        MathNode compMathNode = MathNodeGenerator.generateMathNode(new CMMLInfo(compMathML));
+        return new SubTreeComparison(SimilarityType.identical).getSimilarities(refMathNode, compMathNode, true);
     }
 
     /**
-     * Compare two CMMLInfo document against each other. The type defines how a Match will be displayed.
-     *
-     * @param refDoc  Reference CMMLInfo document
-     * @param compDoc Comparison CMMLInfo document
-     * @param type    defines how a Match will be displayed (similar / identical)
-     * @return list of matches / similarities, list can be empty but never null
-     */
-    static List<Match> compareDocuments(CMMLInfo refDoc, CMMLInfo compDoc, String type) {
-        // Find matches between them. Single leafs are (e.g. a single variable) will not be considered
-        return new SubTreeComparison(type).getSimilarities(refDoc, compDoc, true);
-    }
-
-    /**
-     * Compare two CMMLInfo document against each other. The type defines how a Match will be displayed.
+     * Compare two MathML formulas against each other. The MathML string will be transformed into a {@link CMMLInfo}
+     * document and then to a {@link MathNode} tree.
+     * <br/>
+     * The formulas are compared to find similar structures.
      *
      * @param refMathML  Reference MathML string (must contain pMML and cMML)
      * @param compMathML Comparison MathML string (must contain pMML and cMML)
      * @return list of matches / similarities, list can be empty.
      */
     public static List<Match> compareSimilarMathML(String refMathML, String compMathML) throws IOException, ParserConfigurationException {
+        // switch from a string > CMMLInfo document > abstract MathNode tree
         MathNode refMathNode = MathNodeGenerator.generateMathNode(new CMMLInfo(refMathML)).toAbstract();
         MathNode compMathNode = MathNodeGenerator.generateMathNode(new CMMLInfo(compMathML)).toAbstract();
-        return new SubTreeComparison("similar").getSimilarities(refMathNode, compMathNode, true);
+        return new SubTreeComparison(SimilarityType.similar).getSimilarities(refMathNode, compMathNode, true);
     }
 
     /**
-     * Old score - this is basically a printMathNode out for comparison and be deleted later on
+     * Compare two MathML formulas. The return value is a map of similarity factors like matching depth,
+     * element coverage, indicator for structural or data match and if the comparison formula holds an
+     * equation.
      *
      * @param refMathML  Reference MathML string (must contain pMML and cMML)
      * @param compMathML Comparison MathML string (must contain pMML and cMML)
-     * @return map of all found factors
+     * @return map of all found factors (depth, coverage, structureMatch, dataMatch, isEquation)
      * @throws ParserConfigurationException malformed mathml or even xml in most cases
-     * @throws XPathExpressionException could hint towards a bug
-     * @throws IOException transformation exception between document and string
+     * @throws XPathExpressionException     could hint towards a bug
+     * @throws IOException                  transformation exception between document and string
      */
     public static Map<String, Object> compareOriginalFactors(String refMathML, String compMathML) throws ParserConfigurationException, XPathExpressionException, IOException {
         try {
@@ -88,19 +88,19 @@ public class MathPlag {
             Boolean formula = compDoc.isEquation(true);
             Boolean structMatch = compDoc.toStrictCmml().abstract2CDs()
                     .isMatch(refDoc.toStrictCmml().abstract2CDs().getXQuery());
-            Boolean dataMatch = new CMMLInfo(compMathML).toDataCmml().abstract2DTs()
-                    .isMatch(new CMMLInfo(refMathML).abstract2DTs().getXQuery());
+            Boolean dataMatch = new CMMLInfo(compMathML).toStrictCmml().abstract2DTs()
+                    .isMatch(new CMMLInfo(refMathML).toStrictCmml().abstract2DTs().getXQuery());
 
             HashMap<String, Object> result = new HashMap<>();
             result.put("depth", depth);
             result.put("coverage", coverage);
-            result.put("structure match", structMatch);
-            result.put("data match", dataMatch);
-            result.put("formula", formula);
+            result.put("structureMatch", structMatch);
+            result.put("dataMatch", dataMatch);
+            result.put("isEquation", formula);
             return result;
         } catch (Exception e) {
             // log and throw in this case
-            logger.error("mathml comparison failed", e);
+            logger.error(String.format("mathml comparison failed (refMathML: %s) (compMathML: %s)", refMathML, compMathML), e);
             throw e;
         }
     }

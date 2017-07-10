@@ -1,11 +1,11 @@
 package com.formulasearchengine.mathmlsim.similarity;
 
 import com.formulasearchengine.mathmlsim.similarity.node.MathNode;
-import com.formulasearchengine.mathmlsim.similarity.node.MathNodeGenerator;
 import com.formulasearchengine.mathmlsim.similarity.result.Match;
-import com.formulasearchengine.mathmltools.mml.CMMLInfo;
+import com.formulasearchengine.mathmlsim.similarity.result.SimilarityType;
 import com.google.common.collect.HashMultiset;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,26 +19,15 @@ import java.util.stream.Collectors;
  */
 public class SubTreeComparison {
 
-    private final Match.Type type;
-
-    public SubTreeComparison(String type) {
-        this.type = Match.Type.valueOf(type);
-    }
+    private final SimilarityType type;
 
     /**
-     * Get a list of similarities between a reference and comparison document.
-     * This method will take an extra step to convert the CMMLInfo document to a MathNode.
+     * Constructor with {@link SimilarityType} declaration.
      *
-     * @param refDoc        Reference CMMLInfo document
-     * @param compDoc       Comparison CMMLInfo document
-     * @param onlyOperators find similarities only between operations, leafs are not checked
-     * @return list of similarities, list can be empty but never null
+     * @param type specifies the output declaration of matches, but has otherwise no effect on the comparison.
      */
-    public List<Match> getSimilarities(CMMLInfo refDoc, CMMLInfo compDoc, boolean onlyOperators) {
-        // switch from the CMMLInfo document to our MathNode representation
-        MathNode refTree = MathNodeGenerator.generateMathNode(refDoc);
-        MathNode compTree = MathNodeGenerator.generateMathNode(compDoc);
-        return getSimilarities(refTree, compTree, onlyOperators);
+    public SubTreeComparison(SimilarityType type) {
+        this.type = type;
     }
 
     /**
@@ -49,6 +38,7 @@ public class SubTreeComparison {
      * @param onlyOperators find similarities only between operations, leafs are not checked
      * @return list of similarities, list can be empty but never null
      */
+    @NotNull
     public List<Match> getSimilarities(MathNode refTree, MathNode compTree, boolean onlyOperators) {
         List<Match> similarities = new ArrayList<>();
         findSimilarities(refTree, compTree, similarities, false, onlyOperators);
@@ -153,12 +143,10 @@ public class SubTreeComparison {
     }
 
     /**
-     * This method is still in testing.
-     * <br/>
      * Calculate the coverage factor between two trees, whereas only their leafs
      * are considered. Leafs are typically identifiers or constants.
      *
-     * @param refLeafs all leafs from the partial (or full) reference tree
+     * @param refLeafs  all leafs from the partial (or full) reference tree
      * @param compLeafs all leafs from the partial (or full) comparison tree
      * @return coverage factor between 0 to 1, 1 is a full-match
      */

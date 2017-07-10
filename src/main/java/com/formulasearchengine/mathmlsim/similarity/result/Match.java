@@ -8,16 +8,12 @@ import java.util.List;
 
 /**
  * JSON wrapper for matches between two math expression trees.
- * The Id relates to the reference MET, where submatches refer
+ * The Id relates to the reference MEXT, where submatches refer
  * to the comparison MET.
  *
  * @author Vincent Stange
  */
 public class Match {
-
-    public enum Type {
-        similar, identical
-    }
 
     private String id = "";
 
@@ -34,9 +30,9 @@ public class Match {
      *
      * @param refTree  partial reference tree (or full tree)
      * @param compTree partial comparison tree (or full tree)
-     * @param type
+     * @param type     type of similarity (identical or similar comparison)
      */
-    public Match(MathNode refTree, MathNode compTree, Type type) {
+    public Match(MathNode refTree, MathNode compTree, SimilarityType type) {
         this.id = refTree.getId();
         this.depth = refTree.getDepth();
         this.coverage = SubTreeComparison.getCoverage(refTree.getLeafs(), compTree.getLeafs());
