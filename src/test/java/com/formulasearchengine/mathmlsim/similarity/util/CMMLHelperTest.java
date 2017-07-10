@@ -1,12 +1,35 @@
 package com.formulasearchengine.mathmlsim.similarity.util;
 
+import com.formulasearchengine.mathmltools.mml.CMMLInfo;
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.w3c.dom.Node;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+import java.io.IOException;
+
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Vincent Stange
  */
 public class CMMLHelperTest {
+
+    @Test
+    public void getFirstApplyNode() throws IOException, ParserConfigurationException, XPathExpressionException {
+        // presentation mml with content semantics
+        assertThat(CMMLHelper.getFirstApplyNode(new CMMLInfo(getResourceFile("mathml_apply_1.xml"))), notNullValue());
+        // content mml with presentation semantics
+        assertThat(CMMLHelper.getFirstApplyNode(new CMMLInfo(getResourceFile("mathml_apply_2.xml"))), notNullValue());
+        // only content mml
+        assertThat(CMMLHelper.getFirstApplyNode(new CMMLInfo(getResourceFile("mathml_apply_3.xml"))), notNullValue());
+        // only presentation mml -> should be null
+        assertThat(CMMLHelper.getFirstApplyNode(new CMMLInfo(getResourceFile("mathml_apply_4.xml"))), nullValue());
+    }
 
     @Test
     public void getStrictCmml() throws Exception {
@@ -100,6 +123,10 @@ public class CMMLHelperTest {
                 "  </semantics>\n" +
                 "</math>";
         Assert.assertNotNull(CMMLHelper.getStrictCmml(mathml));
+    }
+
+    private String getResourceFile(String filename) throws IOException, ParserConfigurationException {
+        return IOUtils.toString(this.getClass().getResourceAsStream(filename), "UTF-8");
     }
 
 }
