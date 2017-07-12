@@ -34,12 +34,14 @@
         <developerConnection>scm:git:git@github.com:ag-gipp/mathmlsim.git</developerConnection>
         <url>git@github.com:ag-gipp/mathmlsim.git</url>
     </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -51,12 +53,25 @@
         </repository>
     </distributionManagement>
 
+    <repositories>
+        <repository>
+            <id>snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <dependencies>
         <!-- document expression and query syntax -->
         <dependency>
             <groupId>com.formulasearchengine</groupId>
             <artifactId>mathmltools</artifactId>
-            <version>0.3.1-SNAPSHOT</version>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!-- Apache Commons - always helpful -->
         <dependency>
