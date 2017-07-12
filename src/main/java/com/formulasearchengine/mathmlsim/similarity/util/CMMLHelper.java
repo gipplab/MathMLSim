@@ -79,13 +79,13 @@ public class CMMLHelper {
     public static Node getFirstApplyNode(CMMLInfo cmmlInfo) throws XPathExpressionException {
         // 1. search for a separate cmml semantic
         XPath xpath = XMLHelper.namespaceAwareXpath("m", CMMLInfo.NS_MATHML);
-        Node applyRoot = getElement(cmmlInfo, "*:math/*:semantics/*:annotation-xml[@encoding='MathML-Content']/*:apply", xpath);
+        Node applyRoot = getElement(cmmlInfo, "m:math/m:semantics/m:annotation-xml[@encoding='MathML-Content']/m:apply", xpath);
         if (applyRoot == null) {
             // 2. search for a main cmml semantic
             applyRoot = getElement(cmmlInfo, "*//m:semantics/m:apply", xpath);
             if (applyRoot == null) {
                 // 3. try to take the apply right beneath the math elements
-                applyRoot = getElement(cmmlInfo, "*:math/m:apply", xpath);
+                applyRoot = getElement(cmmlInfo, "m:math/m:apply", xpath);
             }
         }
         return applyRoot;
