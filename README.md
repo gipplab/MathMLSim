@@ -17,7 +17,7 @@ Similarity calculation module for MathML formulae
  
 Note-worthy dependencies for this library.
  
-**MathML Tools**: Library with various tools for processing MathML using Java. (https://github.com/physikerwelt/MathMLTools)
+**MathML Tools**: Library with various tools for processing MathML using Java. (https://github.com/ag-gipp/MathMLTools)
  
     <dependency>
         <groupId>com.formulasearchengine</groupId>
