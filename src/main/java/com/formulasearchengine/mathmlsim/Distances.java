@@ -182,7 +182,6 @@ public class Distances {
     private static void cleanupHistogram(String tagName, Map<String, Double> histogram) {
         switch (tagName) {
             case "csymbol":
-                histogram.remove("based_integer");
                 for (String key : ValidCSymbols.VALID_CSYMBOLS) {
                     histogram.remove(key);
                 }
