@@ -4,7 +4,7 @@
 
     <groupId>com.formulasearchengine</groupId>
     <artifactId>mathmlsim</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>MathML Similarity</name>
     <description>Batch processing and evaluation of Math queries</description>
